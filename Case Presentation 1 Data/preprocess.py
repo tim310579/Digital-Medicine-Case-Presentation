@@ -75,7 +75,7 @@ def merge_train_test_dir(train_path, test_path):
     all_files = files_train + files_test
 
     set_tmp = set(all_files) #use set to remove duplicated
-    print(len(set_tmp))
+    #print(len(set_tmp))
     useless_record = ['ID_716', 'ID_725', 'ID_728', 'ID_737', 'ID_740', 'ID_747', 'ID_851', 'ID_855', 'ID_861', 'ID_869', 'ID_882', 'ID_884', 'ID_891', 'ID_715', 'ID_726', 'ID_734', 'ID_739', 'ID_746', 'ID_750', 'ID_854', 'ID_857', 'ID_868', 'ID_873', 'ID_876', 'ID_883', 'ID_890', 'ID_892', 'ID_897', 'ID_904', 'ID_909', 'ID_915', 'ID_921', 'ID_929', 'ID_932', 'ID_935', 'ID_943', 'ID_945']
 
     for item in useless_record:
@@ -83,7 +83,7 @@ def merge_train_test_dir(train_path, test_path):
         set_tmp.remove('Y_'+item+'.txt')
 
     print(len(set_tmp))
-    print(set_tmp)
+    #print(set_tmp)
 
     return list(set_tmp)
     
