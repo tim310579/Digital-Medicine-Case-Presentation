@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+<<<<<<< HEAD
 from os import listdir
 from os.path import isfile, isdir, join
 
@@ -177,6 +178,28 @@ output = net(X_train)
 
 print(output)
 '''
+=======
+from sklearn.model_selection import train_test_split
+import os
+
+#del_col = ['is_Obese', 'text_obese']
+del_col = ['is_Obese']
+
+def load_data(filename):
+    
+    df = pd.read_csv(filename)
+    #print(df)
+
+    Y_df = df['is_Obese']
+    if Y_df.dtype=='int64': Y_df = to_categorical(Y_df, 2)
+    X_df = df
+    X_df = X_df.drop(columns=del_col)
+
+    return X_df, Y_df
+    
+#print(X_train, Y_train)
+
+>>>>>>> 1d5f24e (update preprocessing and nn_model)
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation
@@ -184,20 +207,42 @@ from tensorflow.keras.utils import to_categorical
 
 model = Sequential()
 
+<<<<<<< HEAD
 model.add(Dense(units=600, activation='relu'))
 
 model.add(Dense(units=600, activation='relu'))
 model.add(Dense(units=600, activation='relu'))
 model.add(Dense(units=600, activation='relu'))
+=======
+model.add(Dense(units=100, activation='relu'))
+#model.add(Dropout(0.5))
+model.add(Dense(units=100, activation='relu'))
+#model.add(Dropout(0.5))
+model.add(Dense(units=100, activation='relu'))
+>>>>>>> 1d5f24e (update preprocessing and nn_model)
 
 model.add(Dense(units=2, activation='softmax'))
 
 model.compile(loss='categorical_crossentropy',
                   optimizer='adam', metrics=['accuracy'])
+<<<<<<< HEAD
 # train model
 Y_train = to_categorical(Y_train, 2)
 Y_test = to_categorical(Y_test, 2)
 model.fit(X_train, Y_train, batch_size=50, epochs=50)
+=======
+
+#X_train, Y_train = load_data('train_data.csv')
+#X_test, Y_test = load_data('test_data.csv')
+X_valid, df_file_name = load_data('valid_data.csv')
+
+# train model
+
+X_merge_data, Y_merge_data = load_data('merge_data.csv')
+X_train, X_test, Y_train, Y_test = train_test_split(X_merge_data, Y_merge_data, stratify=Y_merge_data, test_size=0.3, random_state=88)
+
+model.fit(X_train, Y_train, batch_size=100, epochs=30)
+>>>>>>> 1d5f24e (update preprocessing and nn_model)
 
 # evaluate the model and output the accuracy
 result_train = model.evaluate(X_train, Y_train)
@@ -213,4 +258,7 @@ pred_df.to_csv("./pred.csv", index=False)
 print(pred_df)
 print(pred_df['Obesity'].value_counts())
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1d5f24e (update preprocessing and nn_model)

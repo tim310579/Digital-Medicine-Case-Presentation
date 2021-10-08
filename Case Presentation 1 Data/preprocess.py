@@ -2,18 +2,14 @@ import numpy as np
 import pandas as pd
 from os import listdir
 from os.path import isfile, isdir, join
+import os
 
-
-def preprocessing(train_path):
-    files = listdir(train_path)
+def preprocessing(train_path, files):
+    if files == 0:
+        files = listdir(train_path)
     #files.sort()
 
-    #print(files)
-    cnt = 0
-    #print(len(files))
-    TP, TN, FP, FN = 0, 0, 0, 0
-
-    disease = ['coronary', 'diabetic', 'diabetes', 'hypertriglyceridemia', 'dyslipidemia', 'hypertension', 'hypothyroidism', 'Hyperlipidemia', 'gout', 'chronic', 'myocardial infarction', 'heart failure', 'non-distended', 'nonobese', 'nondistended', 'non-distended', 'non-obese']
+    disease = ['coronary', 'diabetic', 'diabetes', 'hypertriglyceridemia', 'dyslipidemia', 'hypertension', 'hypothyroidism', 'Hyperlipidemia', 'gout', 'chronic', 'myocardial infarction', 'heart failure', 'non-distended', 'cholesterolemia', 'nondistended', 'non-distended', 'non-obese']
 
 
     df = pd.DataFrame()
@@ -22,7 +18,10 @@ def preprocessing(train_path):
 
     for file in files:
         #if 'U' in file: continue
-        f = open(join(train_path, file), 'r')
+        try:
+            f = open(join(train_path, file), 'r')
+        except:
+            f = open(join(train_path, file.replace('U', 'N')), 'r')
         record = f.read()
         has_obes = record.upper().count('obes'.upper()) + record.upper().count('overweight'.upper())
         
@@ -38,7 +37,7 @@ def preprocessing(train_path):
                 df = df.append([[1, has_obes] + has_disease])
             else:
                 df = df.append([[0, has_obes] + has_disease])
-        #print(has_obes)
+        '''
         if has_obes > 0:
             cnt += 1
             if 'Y' in file: 
@@ -54,7 +53,7 @@ def preprocessing(train_path):
             else: 
                 TN += 1
             #print(file, has_obes, has_disease)
-
+        '''
         f.close()
 
     df.columns=['is_Obese', 'text_obese'] + disease
@@ -62,13 +61,49 @@ def preprocessing(train_path):
     
     return df
 
+
+def merge_train_test_dir(train_path, test_path):
+    
+
+    files_train = listdir(train_path)
+    files_test = listdir(test_path)
+
+    
+    for i in range(len(files_test)):
+        files_test[i] = files_test[i].replace('N', 'U')
+        
+    all_files = files_train + files_test
+
+    set_tmp = set(all_files) #use set to remove duplicated
+    print(len(set_tmp))
+    useless_record = ['ID_716', 'ID_725', 'ID_728', 'ID_737', 'ID_740', 'ID_747', 'ID_851', 'ID_855', 'ID_861', 'ID_869', 'ID_882', 'ID_884', 'ID_891', 'ID_715', 'ID_726', 'ID_734', 'ID_739', 'ID_746', 'ID_750', 'ID_854', 'ID_857', 'ID_868', 'ID_873', 'ID_876', 'ID_883', 'ID_890', 'ID_892', 'ID_897', 'ID_904', 'ID_909', 'ID_915', 'ID_921', 'ID_929', 'ID_932', 'ID_935', 'ID_943', 'ID_945']
+
+    for item in useless_record:
+        set_tmp.remove('U_'+item+'.txt')
+        set_tmp.remove('Y_'+item+'.txt')
+
+    print(len(set_tmp))
+    print(set_tmp)
+
+    return list(set_tmp)
+    
 train_path = "Train_Textual/"
 test_path = "Test_Intuitive/"
 valid_path = "Validation/"
 
-df_train = preprocessing(train_path)
-df_test = preprocessing(test_path)
-df_valid = preprocessing(valid_path)
+merge_path = "Merge_dataset/"
+
+files_merge = merge_train_test_dir(train_path, test_path)
+#print(files_merge)
+
+df_merge = preprocessing(merge_path, files_merge)
+df_merge.to_csv('merge_data.csv', index=None)
+#aa
+
+
+df_train = preprocessing(train_path, 0)
+df_test = preprocessing(test_path, 0)
+df_valid = preprocessing(valid_path, 0)
 
 df_train.to_csv('train_data.csv', index=None)
 df_test.to_csv('test_data.csv', index=None)
