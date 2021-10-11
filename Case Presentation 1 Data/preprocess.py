@@ -15,6 +15,7 @@ def preprocessing(train_path, files):
     df = pd.DataFrame()
     #df = pd.DataFrame(columns=['is_Obese', 'text_obese'] + disease)
     #df.columns = ['is_Obese', 'text_obese']
+    # TP, FP, FN, TN = 0,0,0,0
 
     for file in files:
         #if 'U' in file: continue
@@ -39,7 +40,6 @@ def preprocessing(train_path, files):
                 df = df.append([[0, has_obes] + has_disease])
         '''
         if has_obes > 0:
-            cnt += 1
             if 'Y' in file: 
                 #print(file, has_obes)
                 TP += 1
@@ -58,6 +58,7 @@ def preprocessing(train_path, files):
 
     df.columns=['is_Obese', 'text_obese'] + disease
     df = df.reset_index(drop=True)
+    #print(TP, FP, FN, TN)
     
     return df
 
