@@ -51,14 +51,14 @@ def report_model(model, X_train, Y_train, X_test, Y_test, X_valid):
     print('Train')
     print(classification_report(Y_train, train_pred))
     print('Roc_Auc:', roc_auc_score(Y_train, train_pred))
-    print('f1_score:', f1_score(Y_train, train_pred))
+    #print('f1_score:', f1_score(Y_train, train_pred))
     print('')
 
     test_pred = model.predict(X_test)
     print('Test')
     print(classification_report(Y_test, test_pred))
     print('Roc_Auc:', roc_auc_score(Y_test, test_pred))
-    print('f1_score:', f1_score(Y_test, test_pred))
+    #print('f1_score:', f1_score(Y_test, test_pred))
     print('')
     
     valid_pred = model.predict(X_valid)
@@ -85,7 +85,7 @@ model = RandomForestClassifier(
 
 report_model(model, X_train, Y_train, X_test, Y_test, X_valid)
 np.set_printoptions(suppress=True)
-print('feature_importances_:', model.feature_importances_)
+#print('feature_importances_:', model.feature_importances_)
 #report_model(model_2, X_train, Y_train, X_test, Y_test, X_valid)
 #report_model(model_3, X_train, Y_train, X_test, Y_test, X_valid)
 
