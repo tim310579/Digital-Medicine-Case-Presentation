@@ -9,6 +9,7 @@
 We use tf-idf algorithm to produce a csv file, which contains the top 50 common words in all medical record.
 
 ### train textual csv
+
 | | cornory | chronic | diabetes | gout | hypertension | ... |
 |---|---|---|---|---|---|---|
 | count | 400 | 400 | 400 | 400 | 400 | ... | 
