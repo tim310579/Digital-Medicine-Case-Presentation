@@ -1,5 +1,11 @@
 # Case Presentation1
 
+## environment requirement
+`$ pip install -r requirements.txt`
+
+## produce train/test/valid data
+`$ python preprocess.py`
+
 We use tf-idf algorithm to produce a csv file, which contains the top 50 common words in all medical record.
 
 ### train textual csv
@@ -13,12 +19,6 @@ We use tf-idf algorithm to produce a csv file, which contains the top 50 common 
 | 50% |
 | 75% |
 | max |
-
-## environment requirement
-`$ pip install -r requirements.txt`
-
-## produce train/test/valid data
-`$ python preprocess.py`
 
 ## run our nn_model
 `$ python nn_model.py`
