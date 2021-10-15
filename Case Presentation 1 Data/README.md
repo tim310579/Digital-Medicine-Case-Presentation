@@ -8,7 +8,7 @@
 
 We use tf-idf algorithm to produce a csv file, which contains the top 50 common words in all medical record.
 
-### train textual csv
+### tf-idf result
 
 | | cornory | chronic | diabetes | gout | hypertension | ... |
 |---|---|---|---|---|---|---|
@@ -20,6 +20,17 @@ We use tf-idf algorithm to produce a csv file, which contains the top 50 common 
 | 50% |
 | 75% |
 | max |
+
+### train_data.csv
+
+| id | is_Obese| cornory | chronic | diabetes | gout | hypertension | ... |
+|---|---|---|---|---|---|---|---|
+| 0 | 7 | 0 | 0 | 0 | 0 | ... |
+| 1 | 0 | 1 | 0 | 0 | 0 | ... |
+| 2 | 0 | 2 | 0 | 2 | 0 | ... |
+| 3 | 0 |	1 |	0	| 3	| 0 | ... |
+| 4 | 0 |	0 |	0	| 3	| 0 | ... |
+| 5 | 0 | 2 | 0 | 2 | 0 | ... |
 
 ## run train_data.csv to train nn_model
 `$ python nn_model.py`
