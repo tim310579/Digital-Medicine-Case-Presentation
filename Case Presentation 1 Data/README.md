@@ -21,5 +21,5 @@ We use tf-idf algorithm to produce a csv file, which contains the top 50 common 
 | 75% |
 | max |
 
-## run our nn_model
+## run train_data.csv to train nn_model
 `$ python nn_model.py`
