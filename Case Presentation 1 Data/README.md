@@ -3,7 +3,7 @@
 ## environment requirement
 `$ pip install -r requirements.txt`
 
-## produce train/test/valid data
+## produce train/test/valid data(csv)
 `$ python preprocess.py`
 
 We use tf-idf algorithm to produce a csv file, which contains the top 50 common words in all medical record.
