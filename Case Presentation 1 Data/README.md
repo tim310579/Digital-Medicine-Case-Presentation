@@ -1,4 +1,4 @@
-## environment
+## environment requirement
 `$ pip install -r requirements.txt`
 
 ## produce train/test/valid data
