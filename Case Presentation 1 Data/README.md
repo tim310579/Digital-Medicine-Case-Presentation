@@ -6,13 +6,13 @@ We use tf-idf algorithm to produce a csv file, which contains the top 50 common 
 | | cornory | chronic | diabetes | gout | hypertension | ... |
 |---|---|---|---|---|---|---|
 | count | 400 | 400 | 400 | 400 | 400 | ... | 
-| mean |
+| mean | 0.022213 | 0.012447 | 0.017089 | 0.005995 | 0.013830 | ... |
 | std |
-| min|
-| 25%|
-| 50%|
-| 75%|
-| max|
+| min |
+| 25% |
+| 50% |
+| 75% |
+| max |
 
 ## environment requirement
 `$ pip install -r requirements.txt`
