@@ -4,6 +4,15 @@ from os import listdir
 from os.path import isfile, isdir, join
 import os
 
+REMOVED_TITLES = ['POTENTIALLY SERIOUS INTERACTION', 'Discharge Date', 'Attending','Reason for override',
+'DISCHARGE MEDICATIONS', 'Alert overridden', 'Dictated By', 'T', 'BRIEF RESUME OF HOSPITAL COURSE', 
+'ENTERED BY', 'Service', 'DISCHARGE PATIENT ON', 'ALLERGIES', 'Override Notice', 'ALLERGY', 'CODE STATUS',
+'Batch', 'CC', 'ATTENDING', 'eScription document', 'D', 'FAMILY HISTORY', 'MEDICATIONS', 
+'Previous override information', 'SERIOUS INTERACTION', 'MEDICATIONS ON ADMISSION', 'CHLORIDE Reason for override', 
+'ID', 'RETURN TO WORK', 'LISINOPRIL Reason for override', 'MEDICATIONS ON DISCHARGE', 'SERVICE', 'cc', 
+'WARFARIN Reason for override', 'ADMISSION MEDICATIONS', 'Infectious disease', 'CURRENT MEDICATIONS', 
+'Infectious Disease']
+
 def reconstruct(text):
     '''
     To reconstruct the input article.
@@ -26,7 +35,7 @@ def reconstruct(text):
     return '\n'.join(text_rev).replace(' , ', ', ')
 
 
-def remove_section(text, titles):
+def remove_section(text, titles=REMOVED_TITLES):
     '''
     To remove specified sections from the text.
     Inputs
