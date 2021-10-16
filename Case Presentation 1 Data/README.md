@@ -23,6 +23,8 @@ We use tf-idf algorithm to produce a csv file, which contains the top 50 common 
 
 ### train_data.csv
 
+Use words produced by tf-idf to generate word count csv file with every record.
+
 | id | is_Obese| coronary	|	diabetic | diabetes | hypertriglyceridemia | dyslipidemia | ... |
 |---|---|---|---|---|---|---|---|
 | 0 | 0 | 7 | 0 | 0 | 0 | 0 | ... |
