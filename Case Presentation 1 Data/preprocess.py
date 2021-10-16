@@ -4,13 +4,59 @@ from os import listdir
 from os.path import isfile, isdir, join
 import os
 
+def reconstruct(text):
+    '''
+    To reconstruct the input article.
+    Inputs:
+        text: the original text
+    Returns:
+        text_rev: recontructed text
+    '''
+
+    text_rev = []
+    text = text.replace('. ', '.\n')
+    text = text.replace(',\n ', ', ')
+
+    for line in text.split('\n'):
+        if len(text_rev)==0 or ':' in line:
+            text_rev.append(line)
+        else:
+            text_rev[-1] = text_rev[-1] + f' {line}'
+
+    return '\n'.join(text_rev).replace(' , ', ', ')
+
+
+def remove_section(text, titles):
+    '''
+    To remove specified sections from the text.
+    Inputs
+        text, a string. The original text/article.
+        titles, a list of string. A collection of section titles that will be removed from the original text/article.
+    Returns
+        text_rev, a string. The revised text/article.
+    '''
+    text = reconstruct(text)
+    text_rev = []
+    
+    for section in text.split('\n'):
+        relevent = True
+        for t in titles:
+            if (t+':') in section:
+                relevent = False
+                break
+        
+        if relevent:
+            text_rev.append(section)
+    
+    return '\n'.join(text_rev).replace(' , ', ', ')
+
+
 def preprocessing(train_path, files):
     if files == 0:
         files = listdir(train_path)
     #files.sort()
 
     disease = ['coronary', 'diabetic', 'diabetes', 'hypertriglyceridemia', 'dyslipidemia', 'hypertension', 'hypothyroidism', 'Hyperlipidemia', 'gout', 'chronic', 'myocardial infarction', 'heart failure', 'non-distended', 'cholesterolemia', 'nondistended', 'non-distended']#, 'non-obese']
-
 
     df = pd.DataFrame()
     #df = pd.DataFrame(columns=['is_Obese', 'text_obese'] + disease)
@@ -64,12 +110,10 @@ def preprocessing(train_path, files):
 
 
 def merge_train_test_dir(train_path, test_path):
-    
 
     files_train = listdir(train_path)
     files_test = listdir(test_path)
 
-    
     for i in range(len(files_test)):
         files_test[i] = files_test[i].replace('N', 'U')
         
@@ -87,29 +131,32 @@ def merge_train_test_dir(train_path, test_path):
     #print(set_tmp)
 
     return list(set_tmp)
-    
-train_path = "Train_Textual/"
-test_path = "Test_Intuitive/"
-valid_path = "Validation/"
-
-merge_path = "Merge_dataset/"
-
-files_merge = merge_train_test_dir(train_path, test_path)
-#print(files_merge)
-
-df_merge = preprocessing(merge_path, files_merge)
-df_merge.to_csv('merge_data.csv', index=None)
-#aa
 
 
-df_train = preprocessing(train_path, 0)
-df_test = preprocessing(test_path, 0)
-df_valid = preprocessing(valid_path, 0)
+if __name__ == '__main__':
+    os.chdir('./Case Presentation 1 Data')
 
-df_train.to_csv('train_data.csv', index=None)
-df_test.to_csv('test_data.csv', index=None)
-df_valid.to_csv('valid_data.csv', index=None)
+    train_path = "Train_Textual/"
+    test_path = "Test_Intuitive/"
+    valid_path = "Validation/"
 
-#print(df)
-#print(cnt)
-#print(TP, TN, FP, FN)
+    merge_path = "Merge_dataset/"
+
+    files_merge = merge_train_test_dir(train_path, test_path)
+    #print(files_merge)
+
+    df_merge = preprocessing(merge_path, files_merge)
+    df_merge.to_csv('merge_data.csv', index=None)
+    #aa
+
+    df_train = preprocessing(train_path, 0)
+    df_test = preprocessing(test_path, 0)
+    df_valid = preprocessing(valid_path, 0)
+
+    df_train.to_csv('train_data.csv', index=None)
+    df_test.to_csv('test_data.csv', index=None)
+    df_valid.to_csv('valid_data.csv', index=None)
+
+    #print(df)
+    #print(cnt)
+    #print(TP, TN, FP, FN)
