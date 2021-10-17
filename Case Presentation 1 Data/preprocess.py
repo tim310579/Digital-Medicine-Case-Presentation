@@ -1,8 +1,39 @@
+import nltk
 import numpy as np
 import pandas as pd
+import math
+import string
+from nltk.corpus import stopwords
+from collections import Counter
+from nltk.stem.porter import *
+from sklearn.feature_extraction.text import TfidfVectorizer
 from os import listdir
 from os.path import isfile, isdir, join
 import os
+from string import digits
+from nltk.stem.wordnet import WordNetLemmatizer
+
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+def get_tokens(text):
+    lowers = text.lower()
+    #remove the punctuation using the character deletion step of translate
+    remove_punctuation_map = dict((ord(char), None) for char in string.punctuation)
+    
+    no_punctuation = lowers.translate(remove_punctuation_map)
+    #print(no_punctuation)
+    tokens = nltk.word_tokenize(no_punctuation)
+    return tokens
+
+def stem_tokens(tokens, stemmer):
+    stemmed = []
+    for item in tokens:
+        stemmed.append(stemmer.stem(item))
+    return stemmed
+
 
 REMOVED_TITLES = ['POTENTIALLY SERIOUS INTERACTION', 'Discharge Date', 'Attending','Reason for override',
 'DISCHARGE MEDICATIONS', 'Alert overridden', 'Dictated By', 'T', 'BRIEF RESUME OF HOSPITAL COURSE', 
@@ -59,91 +90,136 @@ def remove_section(text, titles=REMOVED_TITLES):
     
     return '\n'.join(text_rev).replace(' , ', ', ')
 
+def nltk_processing(record):
+    #print(record)
+    lowers = record.lower()
+    # remove punctuations
+    remove_punctuation_map = dict((ord(char), None) for char in string.punctuation)  
+    no_punctuation = lowers.translate(remove_punctuation_map)
+        
+    tokens = get_tokens(lowers)
+    # remove stopwords: the, a, this...
+    filtered = [w for w in tokens if not w in stopwords.words('english')]
+    # remove ing, ed, es: brancing, branched, braanches-> branch
+    stemmer = [PorterStemmer().stem(w) for w in filtered]
+    # remove plural: apples->apple
+    lemmed = [WordNetLemmatizer().lemmatize(w, pos='v') for w in stemmer]
 
-def preprocessing(train_path, files):
+    return lemmed
+
+features = set()
+features.add('is_Obese')
+prev_27 = ['obesity', 'obese', 'bs', 'apnea', 'morbid', 'sleep', 'knee', 'right', 'gastric', 'levofloxacin', 'subcutaneously', 'renal','postoperative', 'bid', 'warfarin', 'continued', 'obstructive']
+for element in prev_27:
+    
+    element_lemmed = nltk_processing(element)
+    features.add(element_lemmed[0])
+
+#features.add('obesity', 'obese', 'bs', 'apnea', 'morbid', 'sleep', 'knee', 'right', 'gastric', 'levofloxacin', 'subcutaneously', 'renal','postoperative', 'bid', 'warfarin', 'continued', 'obstructive')
+
+
+def preprocessing_to_find_feature(train_path, files):
     if files == 0:
         files = listdir(train_path)
     #files.sort()
 
-    disease = ['coronary', 'diabetic', 'diabetes', 'hypertriglyceridemia', 'dyslipidemia', 'hypertension', 'hypothyroidism', 'Hyperlipidemia', 'gout', 'chronic', 'myocardial infarction', 'heart failure', 'non-distended', 'cholesterolemia', 'nondistended', 'non-distended']#, 'non-obese']
-
+    #disease = ['coronary', 'diabetic', 'diabetes', 'hypertriglyceridemia', 'dyslipidemia', 'hypertension', 'hypothyroidism', 'Hyperlipidemia', 'gout', 'chronic', 'myocardial infarction', 'heart failure', 'non-distended', 'cholesterolemia', 'nondistended', 'non-distended']#, 'non-obese']
+    #disease2 = ['obesity', 'obese', 'bs', 'apnea', 'morbid', 'sleep', 'knee', 'right', 'gastric', 'levofloxacin', 'subcutaneously', 'renal','postoperative', 'bid', 'warfarin', 'continued', 'obstructive'] 
+    #disease_U = ['dehydration', 'osteopenia', 'renal dysfunction', 'hernia', 'angina', 'CHF', 'pulmonary edema', 'pneumothorax', 'osteoporosis', 'anemia', 'hematuria', 'arthritis']
+    
+    #disease += disease2
+    #disease += disease_U
+    
     df = pd.DataFrame()
     #df = pd.DataFrame(columns=['is_Obese', 'text_obese'] + disease)
     #df.columns = ['is_Obese', 'text_obese']
     # TP, FP, FN, TN = 0,0,0,0
-
+    
     for file in files:
         #if 'U' in file: continue
         try:
             f = open(join(train_path, file), 'r')
         except:
             f = open(join(train_path, file.replace('U', 'N')), 'r')
-        record = f.read()
-        has_obes = record.upper().count('obes'.upper()) + record.upper().count('overweight'.upper())
+
+        table = str.maketrans('', '', digits)
         
-        has_disease = []
-        for item in disease:
-            has_disease.append(record.upper().count(item.upper()))
-        #print(has_obes)
-        #print([['1', has_obes] + has_disease])
-        if 'Valid' in train_path:
-            df = df.append([[file, has_obes] + has_disease])
+        records = f.read()
+        records = reconstruct(records)
+        records = remove_section(records, REMOVED_TITLES)
+        
+        record = records.translate(table)
+        
+        lemmed = nltk_processing(record)
+        #print(lemmed)
+        count = Counter(lemmed)
+        
+        for item in count.most_common(50):
+            if item[1] > 2 and len(item[0]) > 3: features.add(item[0])
+            #print(item[0])
+
+        #break
+
+    #return features
+
+def count_feature_occurence(path, files):
+    if files == 0:
+        files = listdir(path)
+    indexs = []
+    if 'Validation' in path: indexs = list(range(0,50))
+    else: indexs = list(range(0,400))
+    
+    df = pd.DataFrame(columns=features, index = indexs)
+    
+    #print(df_1)
+    cnt = 0
+    for file in files:
+        
+        #if 'U' in file: continue
+        try:
+            f = open(join(path, file), 'r')
+        except:
+            f = open(join(path, file.replace('U', 'N')), 'r')
+
+        table = str.maketrans('', '', digits)
+        
+        records = f.read()
+        records = reconstruct(records)
+        records = remove_section(records, REMOVED_TITLES)
+        
+        record = records.translate(table)
+
+        lemmed = nltk_processing(record)
+        #print(lemmed)
+        count = Counter(lemmed)
+        
+        for item in count.most_common(len(count)):
+            #print(item)
+            if str(item[0]) in features:
+                df.loc[cnt, str(item[0])] = item[1]
+            
+                
+            #df.loc[cnt, str(item)] = no_punctuation.count(item)
+            #print(item, no_punctuation.count(item))
+            
+        
+        #df = pd.DataFrame(columns=['a','b'], index = [0,1])
+        #df['a'] = 99
+        if 'Valid' in path:
+            df.loc[cnt, 'is_Obese'] = file
         else:
             if 'Y' in file:
-                df = df.append([[1, has_obes] + has_disease])
+                df.loc[cnt, 'is_Obese'] = 1
             else:
-                df = df.append([[0, has_obes] + has_disease])
-        '''
-        if has_obes > 0:
-            if 'Y' in file: 
-                #print(file, has_obes)
-                TP += 1
-            else: 
-                FP += 1
-            #print(file, has_obes, has_disease)
-        else:
-            if 'Y' in file: 
-                FN += 1
-                #print(file, has_obes, has_disease)
-            else: 
-                TN += 1
-            #print(file, has_obes, has_disease)
-        '''
-        f.close()
-
-    df.columns=['is_Obese', 'text_obese'] + disease
-    df = df.reset_index(drop=True)
-    #print(TP, FP, FN, TN)
-    
-    return df
-
-
-def merge_train_test_dir(train_path, test_path):
-
-    files_train = listdir(train_path)
-    files_test = listdir(test_path)
-
-    for i in range(len(files_test)):
-        files_test[i] = files_test[i].replace('N', 'U')
+                df.loc[cnt, 'is_Obese'] = 0
+        cnt += 1
         
-    all_files = files_train + files_test
-
-    set_tmp = set(all_files) #use set to remove duplicated
-    #print(len(set_tmp))
-    useless_record = ['ID_716', 'ID_725', 'ID_728', 'ID_737', 'ID_740', 'ID_747', 'ID_851', 'ID_855', 'ID_861', 'ID_869', 'ID_882', 'ID_884', 'ID_891', 'ID_715', 'ID_726', 'ID_734', 'ID_739', 'ID_746', 'ID_750', 'ID_854', 'ID_857', 'ID_868', 'ID_873', 'ID_876', 'ID_883', 'ID_890', 'ID_892', 'ID_897', 'ID_904', 'ID_909', 'ID_915', 'ID_921', 'ID_929', 'ID_932', 'ID_935', 'ID_943', 'ID_945']
-
-    for item in useless_record:
-        set_tmp.remove('U_'+item+'.txt')
-        set_tmp.remove('Y_'+item+'.txt')
-
-    print(len(set_tmp))
-    #print(set_tmp)
-
-    return list(set_tmp)
-
-
+        #break
+    df = df.fillna(0)
+    return df
+    
 if __name__ == '__main__':
-    os.chdir('./Case Presentation 1 Data')
+    os.chdir('../Case Presentation 1 Data')
 
     train_path = "Train_Textual/"
     test_path = "Test_Intuitive/"
@@ -151,21 +227,21 @@ if __name__ == '__main__':
 
     merge_path = "Merge_dataset/"
 
-    files_merge = merge_train_test_dir(train_path, test_path)
-    #print(files_merge)
-
-    df_merge = preprocessing(merge_path, files_merge)
-    df_merge.to_csv('merge_data.csv', index=None)
+    
+    
     #aa
 
-    df_train = preprocessing(train_path, 0)
-    df_test = preprocessing(test_path, 0)
-    df_valid = preprocessing(valid_path, 0)
+    preprocessing_to_find_feature(train_path, 0) # get features
+    #print(df_train)
+    df_train = count_feature_occurence(train_path, 0)
+    df_test = count_feature_occurence(test_path, 0)
+    df_valid = count_feature_occurence(valid_path, 0)
+    
+    #df_test = preprocessing(test_path, 0)
+    #df_valid = preprocessing(valid_path, 0)
 
     df_train.to_csv('train_data.csv', index=None)
     df_test.to_csv('test_data.csv', index=None)
     df_valid.to_csv('valid_data.csv', index=None)
 
-    #print(df)
-    #print(cnt)
-    #print(TP, TN, FP, FN)
+    print(df_train)    
