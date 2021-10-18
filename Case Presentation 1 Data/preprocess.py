@@ -12,7 +12,7 @@ from os.path import isfile, isdir, join
 import os
 from string import digits
 from nltk.stem.wordnet import WordNetLemmatizer
-
+import pickle
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -110,6 +110,9 @@ def nltk_processing(record):
 features = set()
 features.add('is_Obese')
 prev_27 = ['obesity', 'obese', 'bs', 'apnea', 'morbid', 'sleep', 'knee', 'right', 'gastric', 'levofloxacin', 'subcutaneously', 'renal','postoperative', 'bid', 'warfarin', 'continued', 'obstructive']
+disease = ['coronary', 'diabetic', 'diabetes', 'hypertriglyceridemia', 'dyslipidemia', 'hypertension', 'hypothyroidism', 'Hyperlipidemia', 'gout', 'chronic', 'myocardial infarction', 'heart failure', 'non-distended', 'cholesterolemia', 'nondistended', 'non-distended']#, 'non-obese']
+prev_27 += disease
+
 for element in prev_27:
     
     element_lemmed = nltk_processing(element)
@@ -155,14 +158,17 @@ def preprocessing_to_find_feature(train_path, files):
         count = Counter(lemmed)
         
         for item in count.most_common(50):
-            if item[1] > 2 and len(item[0]) > 3: features.add(item[0])
+            if item[1] > 2 and len(item[0]) > 2: features.add(item[0])
             #print(item[0])
 
         #break
 
     #return features
 
+
+
 def count_feature_occurence(path, files):
+    all_word_list = []
     if files == 0:
         files = listdir(path)
     indexs = []
@@ -174,7 +180,7 @@ def count_feature_occurence(path, files):
     #print(df_1)
     cnt = 0
     for file in files:
-        
+        print(file)
         #if 'U' in file: continue
         try:
             f = open(join(path, file), 'r')
@@ -190,9 +196,14 @@ def count_feature_occurence(path, files):
         record = records.translate(table)
 
         lemmed = nltk_processing(record)
-        #print(lemmed)
-        count = Counter(lemmed)
         
+        #print(lemmed)
+        all_word_list.append(lemmed)
+
+        count = Counter(lemmed)
+        #print(count.most_common(len(count)))
+
+        #stop
         for item in count.most_common(len(count)):
             #print(item)
             if str(item[0]) in features:
@@ -214,9 +225,16 @@ def count_feature_occurence(path, files):
                 df.loc[cnt, 'is_Obese'] = 0
         cnt += 1
         
-        #break
+        #if cnt > 10: break
+    #print(all_word_list)
+    #f = open('output.txt', 'w')
+    #f.write(str(all_word_list))
+    #f.close()
+    
+    
     df = df.fillna(0)
-    return df
+    
+    return df, all_word_list
     
 if __name__ == '__main__':
     os.chdir('../Case Presentation 1 Data')
@@ -231,17 +249,23 @@ if __name__ == '__main__':
     
     #aa
 
-    preprocessing_to_find_feature(train_path, 0) # get features
+    #preprocessing_to_find_feature(train_path, 0) # get features
     #print(df_train)
-    df_train = count_feature_occurence(train_path, 0)
-    df_test = count_feature_occurence(test_path, 0)
-    df_valid = count_feature_occurence(valid_path, 0)
+    df_train, words_list = count_feature_occurence(train_path, 0)
+    #df_test = count_feature_occurence(test_path, 0)
+    #df_valid = count_feature_occurence(valid_path, 0)
     
+    with open('to_words_for_tfidf.data', 'wb') as filehandle:
+        # store the data as binary data stream
+        pickle.dump(words_list, filehandle)
+
+
+
     #df_test = preprocessing(test_path, 0)
     #df_valid = preprocessing(valid_path, 0)
 
     df_train.to_csv('train_data.csv', index=None)
-    df_test.to_csv('test_data.csv', index=None)
-    df_valid.to_csv('valid_data.csv', index=None)
+    #df_test.to_csv('test_data.csv', index=None)
+    #df_valid.to_csv('valid_data.csv', index=None)
 
     print(df_train)    
