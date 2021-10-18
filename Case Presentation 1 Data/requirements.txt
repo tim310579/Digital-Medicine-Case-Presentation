@@ -9,4 +9,4 @@ tensorboard<=2.6.0
 tensorboard-plugin-wit<=1.8.0
 tensorflow<=2.6.0
 tensorflow-estimator<=2.6.0
-
+nltk<=3.6.5
