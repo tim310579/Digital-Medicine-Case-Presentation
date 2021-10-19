@@ -107,80 +107,35 @@ def nltk_processing(record):
 
     return lemmed
 
-features = set()
-features.add('is_Obese')
-prev_27 = ['obesity', 'obese', 'bs', 'apnea', 'morbid', 'sleep', 'knee', 'right', 'gastric', 'levofloxacin', 'subcutaneously', 'renal','postoperative', 'bid', 'warfarin', 'continued', 'obstructive']
-disease = ['coronary', 'diabetic', 'diabetes', 'hypertriglyceridemia', 'dyslipidemia', 'hypertension', 'hypothyroidism', 'Hyperlipidemia', 'gout', 'chronic', 'myocardial infarction', 'heart failure', 'non-distended', 'cholesterolemia', 'nondistended', 'non-distended']#, 'non-obese']
-prev_27 += disease
+#features = set()
+#features.add('is_Obese')
+#prev_27 = ['obesity', 'obese', 'bs', 'apnea', 'morbid', 'sleep', 'knee', 'right', 'gastric', 'levofloxacin', 'subcutaneously', 'renal','postoperative', 'bid', 'warfarin', 'continued', 'obstructive']
+#disease = ['coronary', 'diabetic', 'diabetes', 'hypertriglyceridemia', 'dyslipidemia', 'hypertension', 'hypothyroidism', 'Hyperlipidemia', 'gout', 'chronic', 'myocardial infarction', 'heart failure', 'non-distended', 'cholesterolemia', 'nondistended', 'non-distended']#, 'non-obese']
+#prev_27 += disease
 
-for element in prev_27:
+#for element in prev_27:
     
-    element_lemmed = nltk_processing(element)
-    features.add(element_lemmed[0])
+ #   element_lemmed = nltk_processing(element)
+  #  features.add(element_lemmed[0])
 
 #features.add('obesity', 'obese', 'bs', 'apnea', 'morbid', 'sleep', 'knee', 'right', 'gastric', 'levofloxacin', 'subcutaneously', 'renal','postoperative', 'bid', 'warfarin', 'continued', 'obstructive')
 
 
-def preprocessing_to_find_feature(train_path, files):
-    if files == 0:
-        files = listdir(train_path)
-    #files.sort()
 
-    #disease = ['coronary', 'diabetic', 'diabetes', 'hypertriglyceridemia', 'dyslipidemia', 'hypertension', 'hypothyroidism', 'Hyperlipidemia', 'gout', 'chronic', 'myocardial infarction', 'heart failure', 'non-distended', 'cholesterolemia', 'nondistended', 'non-distended']#, 'non-obese']
-    #disease2 = ['obesity', 'obese', 'bs', 'apnea', 'morbid', 'sleep', 'knee', 'right', 'gastric', 'levofloxacin', 'subcutaneously', 'renal','postoperative', 'bid', 'warfarin', 'continued', 'obstructive'] 
-    #disease_U = ['dehydration', 'osteopenia', 'renal dysfunction', 'hernia', 'angina', 'CHF', 'pulmonary edema', 'pneumothorax', 'osteoporosis', 'anemia', 'hematuria', 'arthritis']
-    
-    #disease += disease2
-    #disease += disease_U
-    
-    df = pd.DataFrame()
-    #df = pd.DataFrame(columns=['is_Obese', 'text_obese'] + disease)
-    #df.columns = ['is_Obese', 'text_obese']
-    # TP, FP, FN, TN = 0,0,0,0
-    
-    for file in files:
-        #if 'U' in file: continue
-        try:
-            f = open(join(train_path, file), 'r')
-        except:
-            f = open(join(train_path, file.replace('U', 'N')), 'r')
-
-        table = str.maketrans('', '', digits)
-        
-        records = f.read()
-        records = reconstruct(records)
-        records = remove_section(records, REMOVED_TITLES)
-        
-        record = records.translate(table)
-        
-        lemmed = nltk_processing(record)
-        #print(lemmed)
-        count = Counter(lemmed)
-        
-        for item in count.most_common(50):
-            if item[1] > 2 and len(item[0]) > 2: features.add(item[0])
-            #print(item[0])
-
-        #break
-
-    #return features
-
-
-
-def count_feature_occurence(path, files):
+def generate_fixed_record(path, files):
     all_word_list = []
     if files == 0:
         files = listdir(path)
-    indexs = []
-    if 'Validation' in path: indexs = list(range(0,50))
-    else: indexs = list(range(0,400))
+    #indexs = []
+    #if 'Validation' in path: indexs = list(range(0,50))
+    #else: indexs = list(range(0,400))
     
-    df = pd.DataFrame(columns=features, index = indexs)
+    #df = pd.DataFrame(columns=features, index = indexs)
     
     #print(df_1)
     cnt = 0
     for file in files:
-        print(file)
+        
         #if 'U' in file: continue
         try:
             f = open(join(path, file), 'r')
@@ -196,46 +151,145 @@ def count_feature_occurence(path, files):
         record = records.translate(table)
 
         lemmed = nltk_processing(record)
+
+        all_word_list.append(lemmed)
         
         #print(lemmed)
-        all_word_list.append(lemmed)
+        #for item in lemmed:
+         #   if len(item) > 3:
+          #      all_word_list += item+' '
 
-        count = Counter(lemmed)
-        #print(count.most_common(len(count)))
-
-        #stop
-        for item in count.most_common(len(count)):
-            #print(item)
-            if str(item[0]) in features:
-                df.loc[cnt, str(item[0])] = item[1]
-            
-                
-            #df.loc[cnt, str(item)] = no_punctuation.count(item)
-            #print(item, no_punctuation.count(item))
-            
-        
-        #df = pd.DataFrame(columns=['a','b'], index = [0,1])
-        #df['a'] = 99
-        if 'Valid' in path:
-            df.loc[cnt, 'is_Obese'] = file
-        else:
-            if 'Y' in file:
-                df.loc[cnt, 'is_Obese'] = 1
-            else:
-                df.loc[cnt, 'is_Obese'] = 0
         cnt += 1
         
         #if cnt > 10: break
-    #print(all_word_list)
-    #f = open('output.txt', 'w')
-    #f.write(str(all_word_list))
-    #f.close()
+        #print(all_word_list)
+        #if 'Validation' in path:
+         #   f = open('valid_fixed/%s'%file, 'w')
+          #  f.write(str(all_word_list))
+           # f.close()
+        #else:
+         #   f = open('train_fixed/%s'%file, 'w')
+          #  f.write(str(all_word_list))
+           # f.close()
+        #break
     
+    #df = df.fillna(0)
     
-    df = df.fillna(0)
+    return all_word_list
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
+import pandas as pd
+#pd.set_option("max_rows", 600)
+from pathlib import Path  
+import glob
+
+def tf_idf(text_files,do_slice=False,terms=[]):
+    #text_files =  glob.glob(f"{folder_path}/*.txt")
+    num_files = len(text_files)
+    #print(num_files)
+    text_titles = [Path(text).stem for text in text_files]
+    #print(text_titles)
     
-    return df, all_word_list
+    tfidf_vectorizer = TfidfVectorizer(input='filename', stop_words='english') # 
+    tfidf_vector = tfidf_vectorizer.fit_transform(text_files)
+    tfidf_df = pd.DataFrame(tfidf_vector.toarray(), index=text_titles, columns=tfidf_vectorizer.get_feature_names())
+    #tfidf_df.loc['00_Document Frequency'] = (tfidf_df > 0).sum()
+    #tfidf_df = tfidf_df.sort_values(by = '00_Document Frequency', axis = 1, ascending = False)
     
+    #tfidf_slice = tfidf_df[['coronary', 'diabetic', 'diabetes', 'hypertriglyceridemia', 'dyslipidemia',
+    #                       'hypertension', 'hypothyroidism', 'gout', 'chronic']]
+    if do_slice ==True:
+        tfidf_slice = tfidf_df[terms]
+        tfidf_slice.sort_index().round(decimals=2)
+        return tfidf_slice,set(tfidf_vectorizer.get_feature_names()),tfidf_slice.describe()
+    
+    else:
+        return tfidf_df,set(tfidf_vectorizer.get_feature_names()),tfidf_df.describe()
+    
+def show_meanRank(des_df,num):
+    df_result = des_df.sort_values(by = 'mean', axis = 1, ascending = False)
+    
+    return df_result,df_result.columns[0:num]
+    
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
+import pandas as pd
+
+def tfidf_content(output,do_slice=False,terms=[]):
+    tfidf_vectorizer = TfidfVectorizer(input='content', stop_words='english') # 
+    tfidf_vector = tfidf_vectorizer.fit_transform(output)
+    Index =list(range(0,len(output)))
+    tfidf_df = pd.DataFrame(tfidf_vector.toarray(), index=Index, columns=tfidf_vectorizer.get_feature_names())
+    
+    if do_slice ==True:
+        tfidf_slice = tfidf_df[terms]
+        tfidf_slice.sort_index().round(decimals=2)
+        return tfidf_slice,set(tfidf_vectorizer.get_feature_names()),tfidf_slice.describe()
+    
+    else:
+        return tfidf_df,set(tfidf_vectorizer.get_feature_names()),tfidf_df.describe()
+
+    
+def generate_csv_file(words_list, valid_words_list):
+    nltk_output = []
+    valid_nltk_output = []
+    for T in words_list:
+        nltk_output.append(' '.join(T))
+    for T in valid_words_list:
+        valid_nltk_output.append(' '.join(T))    
+    Y_output = nltk_output[0:200]
+    U_output = nltk_output[200:400]
+
+    df_Y, Y_terms,des_Y = tfidf_content(Y_output)
+    df_U, U_terms,des_U = tfidf_content(U_output)
+
+
+    print('Num of Y terms:',len(Y_terms))
+    print("Num of U terms:",len(U_terms))
+        
+    both_terms = Y_terms.intersection(U_terms)
+    print('Num of Intersection terms:',len(both_terms))
+    both_terms = sorted(both_terms)
+    df_Y2, Y2_terms,des_Y2 = tfidf_content(Y_output,do_slice=True,terms=(both_terms))
+    df_U2,U2_terms ,des_U2= tfidf_content(U_output,do_slice=True,terms=(both_terms))
+        
+    onlyY_terms = Y_terms - U_terms
+    onlyY_terms = sorted(onlyY_terms)
+    df_Y3, Y3_terms,des_Y3 = tfidf_content(Y_output,do_slice=True,terms=(onlyY_terms))
+        
+    #df_result3,ans2 = show_meanRank(des_Y3,20) #des_Y3.sort_values(by = 'mean', axis = 1, ascending = False)
+    #print(ans2)
+    #df_result3
+        
+    differ = des_Y2.values[1] - des_U2.values[1]
+    differ = differ.reshape(1,len(differ))
+    df_dif = pd.DataFrame(differ, index=['mean'], columns=both_terms)
+    df_Results = df_dif.sort_values(by = 'mean', axis = 1, ascending = False)
+
+    Results_terms = set(df_Results.columns[0:50])-set(['dilantin', 'pod', 'cyst', 'lmc'])
+    print(len(Results_terms))
+    print(Results_terms)
+
+    df_Final, Final_terms,des_Final = tfidf_content(nltk_output,do_slice=True,terms=(Results_terms))
+    df_T, T_terms,des_T = tfidf_content(valid_nltk_output,do_slice=True,terms=(Results_terms))
+
+        
+    df_Final['is_Obese'] = df_Final.index
+    df_Final['is_Obese'] = np.where((df_Final['is_Obese']>=200), 1, 0)
+    df_Final.to_csv('train_tfidf_data.csv', index=None)
+
+    import glob
+    validText = glob.glob("Validation/*.txt")
+    v_index = []
+    for v in validText:
+        v_index.append(v[-11:len(v)])
+        # v_index.append(v.split("/")[-1])
+    v_index.sort()
+    df_T['is_Obese'] = v_index
+    df_T.to_csv('valid_tfidf_data.csv', index=None)
+
+
 if __name__ == '__main__':
     os.chdir('../Case Presentation 1 Data')
 
@@ -248,24 +302,55 @@ if __name__ == '__main__':
     
     
     #aa
-
+    
     #preprocessing_to_find_feature(train_path, 0) # get features
     #print(df_train)
-    df_train, words_list = count_feature_occurence(train_path, 0)
-    #df_test = count_feature_occurence(test_path, 0)
-    #df_valid = count_feature_occurence(valid_path, 0)
     
-    with open('to_words_for_tfidf.data', 'wb') as filehandle:
-        # store the data as binary data stream
-        pickle.dump(words_list, filehandle)
+        
+    words_list = []
+    valid_words_list = []
+
+    try:
+        with open('train_words_tfidf.data', 'rb') as filehandle:
+            words_list = pickle.load(filehandle)
+
+        with open('valid_words_tfidf.data', 'rb') as filehandle:
+            valid_words_list = pickle.load(filehandle)
+    except:
+        words_list  = generate_fixed_record(train_path, 0) # generate fixed_txt in train_fixed
+        #df_test = count_feature_occurence(test_path, 0)
+        valid_words_list = generate_fixed_record(valid_path, 0)
+
+        #stop
+        with open('train_words_tfidf.data', 'wb') as filehandle:
+            # store the data as binary data stream
+            pickle.dump(words_list, filehandle)
+
+        with open('valid_words_tfidf.data', 'wb') as filehandle:
+            # store the data as binary data stream
+            pickle.dump(valid_words_list, filehandle)
+        
+    generate_csv_file(words_list, valid_words_list)
 
 
 
+    #Results_terms = use_tfidf_to_generate_train_csv_file()
+    #use_tfidf_to_generate_valid_csv_file(Results_terms)
+    
+
+    
+
+    #df_train = generate_csv_file('train_fixed/', 0)
+    #df_valid = generate_csv_file('valid_fixed/', 0)
+    #print(len(Y_terms),len(U_terms))
+    #print(df_result.columns[0:30])    
     #df_test = preprocessing(test_path, 0)
     #df_valid = preprocessing(valid_path, 0)
 
-    df_train.to_csv('train_data.csv', index=None)
+    #df_train.to_csv('train_data.csv', index=None)
     #df_test.to_csv('test_data.csv', index=None)
     #df_valid.to_csv('valid_data.csv', index=None)
 
-    print(df_train)    
+    
+
+    #print(df_train)    
