@@ -21,6 +21,7 @@ from sklearn.svm import LinearSVC
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import f_classif
 import random
+from numpy import argmax
 
 seed = 88
 tf.random.set_seed(seed)
@@ -130,7 +131,12 @@ def train_nn_model(X_train, Y_train, X_test, Y_test, X_valid, layers):
        
     print('Train Acc:', result_train[1])
     print('Test Acc:', result_test[1])
+    #print(model.predict(X_test)[:,1])
+    print('Train f1 score:', f1_score(Y_train[:,1], np.round(model.predict(X_train)[:,1])))
+    print('Test f1 score:', f1_score(Y_test[:,1], np.round(model.predict(X_test)[:,1])))
+    
     predict = model.predict(X_valid)
+    
 
     pred_df = pd.DataFrame(data={'Filename': df_file_name, 'Obesity': np.round(predict)[:,1]})
     pred_df['Obesity'] = pred_df['Obesity'].astype('int64')
@@ -158,8 +164,8 @@ X_train, Y_train = load_data('train_tfidf_data.csv')
 Y_train = Y_train*(-1)+1
 
 
-X_test, Y_test = load_data('test_tfidf_data.csv')
-Y_test = Y_test*(-1)+1
+#X_test, Y_test = load_data('test_tfidf_data.csv')
+#Y_test = Y_test*(-1)+1
 #pca = PCA(n_components=400)
 #pca.fit(X_train)
 #X_train = pca.transform(X_train)
@@ -171,7 +177,7 @@ Y_test = Y_test*(-1)+1
     #X_train, X_test, Y_train, Y_test = train_test_split(X_merge_data, Y_merge_data, stratify=Y_merge_data, test_size=0.3, random_state=88)
 
     # X_train, Y_train = X_merge_data.copy(), Y_merge_data.copy()
-#X_train, X_test, Y_train, Y_test = train_test_split(X_train, Y_train, stratify=Y_train, test_size=0.125, random_state=seed)
+X_train, X_test, Y_train, Y_test = train_test_split(X_train, Y_train, stratify=Y_train, test_size=0.125, random_state=seed)
 
 #X_train, Y_train = load_data('train_valid_data.csv')
 
