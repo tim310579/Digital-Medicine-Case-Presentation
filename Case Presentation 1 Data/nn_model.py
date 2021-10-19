@@ -33,18 +33,6 @@ tf.compat.v1.set_random_seed(seed)
 #del_col = ['is_Obese', 'text_obese', 'obese', 'obesity']
 del_col = ['is_Obese']
 
-
-def find_useless_feature():
-    global del_col
-    df = pd.read_csv('train_data.csv')
-    for col in df.columns:
-        if col == 'is_Obese': continue
-        if df[col].sum() == 0:
-            del_col += [col]
-            #print(col)
-        if df[col].sum() == 400:
-            del_col += [col]
-            #print(col, 'fkkkkk')
     
 def load_data(filename):
     
@@ -198,21 +186,7 @@ def experiment(k, layers):
     return result, test_acc
 
 if __name__ == '__main__':
-    find_useless_feature()
 
-    
-    #K_best = [50,100]
-    #layers = [3,5]
-    #neurons = [100,200]
-
-    K_best = [50,100,150,200,300,400,500,600]
-    layers = [3,5,7,9,11]
-    neurons = [100,200,300,400,500,600]
-
-    best = 0
-    param = ''
-    df_result = pd.DataFrame(columns = ['param', 'test_acc']) 
-    cnt = 0
 
     #result, test_acc0 = experiment(k=400, layer=11, neuron=200)
     #result, test_acc1 = experiment(k=300, layer=9, neuron=600)
