@@ -6,9 +6,9 @@
 ## produce train/test/valid data(csv)
 `$ python preprocess.py`
 
-Use tf-idf algorithm to selct common words in Y & U record, then select those words which are in Y but not in U(Y-U), and in U not in Y(U-Y).
+#### Use tf-idf algorithm to selct common words in Y & U record, then select those words which are in Y but not in U(Y-U), and in U not in Y(U-Y).
 
-Use the above words to produce a csv file which contains frequency count in every record.
+#### Use the above words to produce a csv file which contains frequency count in every record.
 
 ### train_tfidf_data.csv
 
