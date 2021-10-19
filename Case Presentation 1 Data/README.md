@@ -23,5 +23,6 @@
 | 0 | 0 | 0.036473631 | 0 | 0 | 0.044790763 | 0 | ... |
 | 0 | 0 | 0.02816331 | 0.052166839 | 0 | 0 | 0 | ... |
 
-## run train_data.csv to train nn_model
+## use train_tfidf_data.csv to train nn_model
+
 `$ python nn_model.py`
