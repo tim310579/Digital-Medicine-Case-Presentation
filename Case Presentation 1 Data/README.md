@@ -10,9 +10,9 @@
 
 #### Use the above words to produce a csv file which contains frequency count in every record.
 
-### train_tfidf_data.csv
-
 #### Use words produced by tf-idf to generate word count csv file with every record.
+
+### train_tfidf_data.csv
 
 | dilat	| aortic | admiss	| coronari | bypass	| pressur | ... |
 |---|---|---|---|---|---|---|
