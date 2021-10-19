@@ -27,8 +27,11 @@
 
 `$ python nn_model.py`
 
-#### Train Acc: 0.7857142686843872
-#### Test Acc: 0.6200000047683716
+#### Train Acc: 0.6924999952316284
+#### Test Acc: 0.6575000286102295
+#### Train f1 score: 0.6434782608695652
+#### Test f1 score: 0.6096866096866097
+
 | Filename | Obesity |
 |---|---|
 | ID_1159.txt | 0 |
