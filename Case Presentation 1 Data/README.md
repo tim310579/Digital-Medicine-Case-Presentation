@@ -6,26 +6,14 @@
 ## produce train/test/valid data(csv)
 `$ python preprocess.py`
 
-We use tf-idf algorithm to produce a csv file, which contains the top 50 common words in all medical record.
+Use tf-idf algorithm to selct common words in Y & U record, then select those words which are in Y but not in U(Y-U), and in U not in Y(U-Y).
+Use the above words to produce a csv file which contains frequency count in every record.
 
-### tf-idf result
-
-| | cornory | chronic | diabetes | gout | hypertension | ... |
-|---|---|---|---|---|---|---|
-| count | 400 | 400 | 400 | 400 | 400 | ... | 
-| mean | 0.022213 | 0.012447 | 0.017089 | 0.005995 | 0.013830 | ... |
-| std |
-| min |
-| 25% |
-| 50% |
-| 75% |
-| max |
-
-### train_data.csv
+### train_tfidf_data.csv
 
 Use words produced by tf-idf to generate word count csv file with every record.
 
-| id | is_Obese| coronary	|	diabetic | diabetes | hypertriglyceridemia | dyslipidemia | ... |
+| dilat	| aortic | admiss	| coronari | bypass	| pressur | ... |
 |---|---|---|---|---|---|---|---|
 | 0 | 0 | 7 | 0 | 0 | 0 | 0 | ... |
 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | ... |
