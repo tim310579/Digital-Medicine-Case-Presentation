@@ -150,10 +150,16 @@ X_valid, df_file_name = load_data('valid_tfidf_data.csv')
 
 # train model
 # use original train, test data to train
+'''
+data here
+'''
 X_train, Y_train = load_data('train_tfidf_data.csv')
-Y_train = Y_train*(-1)+1
-#X_test, Y_test = load_data('test_data.csv')
 
+Y_train = Y_train*(-1)+1
+
+
+X_test, Y_test = load_data('test_tfidf_data.csv')
+Y_test = Y_test*(-1)+1
 #pca = PCA(n_components=400)
 #pca.fit(X_train)
 #X_train = pca.transform(X_train)
@@ -165,7 +171,7 @@ Y_train = Y_train*(-1)+1
     #X_train, X_test, Y_train, Y_test = train_test_split(X_merge_data, Y_merge_data, stratify=Y_merge_data, test_size=0.3, random_state=88)
 
     # X_train, Y_train = X_merge_data.copy(), Y_merge_data.copy()
-X_train, X_test, Y_train, Y_test = train_test_split(X_train, Y_train, stratify=Y_train, test_size=0.125, random_state=seed)
+#X_train, X_test, Y_train, Y_test = train_test_split(X_train, Y_train, stratify=Y_train, test_size=0.125, random_state=seed)
 
 #X_train, Y_train = load_data('train_valid_data.csv')
 
@@ -226,7 +232,7 @@ if __name__ == '__main__':
     print(cnt)
     '''
     
-    report_rf_model(X_train, Y_train, X_test, Y_test, X_valid, k='all')
+    #report_rf_model(X_train, Y_train, X_test, Y_test, X_valid, k='all')
     #model = LogisticRegression().fit(X_train, Y_train)
 
     #)
