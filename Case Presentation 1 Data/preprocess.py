@@ -299,11 +299,14 @@ def generate_csv_file(words_list, test_words_list, valid_words_list):
     df_T['is_Obese'] = v_index
     df_T.to_csv('valid_tfidf_data.csv', index=None)
 
-def generate_csv_file_new(words_list, valid_words_list):
+def generate_csv_file_new(words_list, test_words_list, valid_words_list):
     nltk_output = []
+    test_nltk_output = []
     valid_nltk_output = []
     for T in words_list:
         nltk_output.append(' '.join(T))
+    for T in test_words_list:
+        test_nltk_output.append(' '.join(T)) 
     for T in valid_words_list:
         valid_nltk_output.append(' '.join(T))    
     U_output = nltk_output[0:200]
@@ -337,22 +340,26 @@ def generate_csv_file_new(words_list, valid_words_list):
     df_Results = df_dif.sort_values(by = 'mean', axis = 1, ascending = False)
 
     Results_terms = set(df_Results.columns[0:20])-set(['dilantin', 'pod', 'cyst', 'lmc','nonischem','spong','fibromyalgia', 'noncardiac'])
-    Results_terms = Results_terms.union(set(['chronic','gout','hyperlipidemia',  'dyslipidemia',
+    #Results_terms = Results_terms.union(set(['chronic','gout','hyperlipidemia',  'dyslipidemia',
                                               # 'hypertension', 'hypothyroidism','coronary', 'diabetic',
                                                # 'myocardial infarction', 'cholesterolemia','diabetes', 
                                              #'heart failure', 'non-distended', 'hypertriglyceridemia', 'nondistended'
-                                             ]))
-    Results_terms = Results_terms.union(set([ 'creat',  'rouxeni', 'hypoventil', 'hypoxia',  
+     #                                        ]))
+    #Results_terms = Results_terms.union(set([ 'creat',  'rouxeni', 'hypoventil', 'hypoxia',  
             #'collar','trach','pouch','porphyria','pl','hypokinet',
-                                             ]))
+    #                                         ]))
     print(len(Results_terms))
 
     print(Results_terms)
 
     df_Final, Final_terms,des_Final = tfidf_content(nltk_output,do_slice=True,terms=(Results_terms))
+    df_Final_test, Final_terms_test,des_Final_test = tfidf_content(test_nltk_output,do_slice=True,terms=(Results_terms))
     df_T, T_terms,des_T = tfidf_content(valid_nltk_output,do_slice=True,terms=(Results_terms))
 
-        
+    df_Final_test['is_Obese'] = df_Final_test.index
+    df_Final_test['is_Obese'] = np.where((df_Final_test['is_Obese']>=200), 1, 0)
+    df_Final_test.to_csv('test_tfidf_data.csv', index=None)
+    
     df_Final['is_Obese'] = df_Final.index
     df_Final['is_Obese'] = np.where((df_Final['is_Obese']>=200), 1, 0)
     df_Final.to_csv('train_tfidf_data.csv', index=None)
@@ -418,7 +425,7 @@ if __name__ == '__main__':
             pickle.dump(valid_words_list, filehandle)
         
 
-    generate_csv_file(words_list, test_words_list, valid_words_list)
+    generate_csv_file_new(words_list, test_words_list, valid_words_list)
 
 
 
