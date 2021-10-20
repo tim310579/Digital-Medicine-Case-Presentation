@@ -27,10 +27,10 @@
 
 `$ python nn_model.py`
 
-Train Acc: 0.8224999904632568
-Test Acc: 0.8525000214576721
-Train f1 score: 0.8065395095367848
-Test f1 score: 0.8459530026109661
+#### Train Acc: 0.8224999904632568
+#### Test Acc: 0.8525000214576721
+#### Train f1 score: 0.8065395095367848
+#### Test f1 score: 0.8459530026109661
 
 | Filename | Obesity |
 |---|---|
