@@ -6,7 +6,7 @@
 ## produce train/test/valid data(csv)
 `$ python preprocess.py`
 
-#### Use tf-idf to selct common words in Y & U record, then select those words which are in Y but not in U(Y-U), and in U not in Y(U-Y).
+#### Use tf-idf to selct common words in Y & U record, then select those words which are in Y but not in U(Y-U, which is important in Y)
 
 #### Use the above words to produce a csv file which contains frequency count in every record.
 
@@ -27,19 +27,19 @@
 
 `$ python nn_model.py`
 
-#### Train Acc: 0.6924999952316284
-#### Test Acc: 0.6575000286102295
-#### Train f1 score: 0.6434782608695652
-#### Test f1 score: 0.6096866096866097
+Train Acc: 0.8224999904632568
+Test Acc: 0.8525000214576721
+Train f1 score: 0.8065395095367848
+Test f1 score: 0.8459530026109661
 
 | Filename | Obesity |
 |---|---|
 | ID_1159.txt | 0 |
-| ID_1160.txt | 0 |
-| ID_1162.txt | 0 |
+| ID_1160.txt | 1 |
+| ID_1162.txt | 1 |
 | ...| ... |
 | ID_1240.txt | 1 |
-| ID_1242.txt | 0 |
+| ID_1242.txt | 1 |
 | ID_1243.txt | 1 |
 
 | Obesity | Count |
