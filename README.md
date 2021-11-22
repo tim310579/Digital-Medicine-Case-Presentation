@@ -2,7 +2,7 @@
 
 * ###  Dataset:
 
-** Textfile of medical record
+* Textfile of medical record
 
 ## Case2 : Pneumonia 
 
