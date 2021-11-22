@@ -1,7 +1,7 @@
 ## Case1 : Obesity diagnosis
 
-* ###  Dataset: Textfile of medical record
+* ###  Data: Textfile of medical record
 
-## Case2 : Pneumonia 
+## Case2 : Pneumonia diagnosis
 
-* ### Dataset: image of X ray
+* ### Data: Image of X ray
