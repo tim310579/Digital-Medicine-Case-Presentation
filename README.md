@@ -1,6 +1,6 @@
 ## Case1 : Obesity diagnosis
 
-### dataset
+### * Dataset
 
 * Textfile of medical record
 
