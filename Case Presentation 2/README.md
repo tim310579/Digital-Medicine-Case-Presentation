@@ -1,6 +1,7 @@
 # Case Presentation2
 
 * 原始data檔案太大，就不放上來了，只放轉換成圖片的原始大小圖片(to_image_data)
+* github website的檔案列表最多只會顯示1000筆檔案，但1200筆都存在repository，實際clone時不會出問題
 
 ## Data preprocessing 
 
