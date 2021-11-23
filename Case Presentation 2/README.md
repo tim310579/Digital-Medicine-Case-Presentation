@@ -1,6 +1,6 @@
 # Case Presentation2
 
-#### 原始data檔案太大，就不放上來了，只放轉換成圖片的原始大小圖片(to_image_data)
+* 原始data檔案太大，就不放上來了，只放轉換成圖片的原始大小圖片(to_image_data)
 
 ## environment requirement(若使用kaggle notebook，可省略以下)
 `$ pip install -r requirements.txt`
