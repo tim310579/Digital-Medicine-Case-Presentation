@@ -6,7 +6,7 @@
 ## Data preprocessing 
 
 ### environment requirement
-* $ pip install -r requirements.txt`
+* $ `pip install -r requirements.txt`
 
 ### origin data
 <img src="https://github.com/tim310579/Digital-Medicine-Case-Presentation/blob/main/Case%20Presentation%202/to_image_data/train/00af6f8c2a3d.jpg" width="20%">
