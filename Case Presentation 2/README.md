@@ -28,3 +28,10 @@
 * 若電腦沒有GPU，建議直接使用kaggle notebook執行程式
 
 * notebook連結
+
+| FileID | Type |
+|---|---|
+|014cc6362544|Atypical|
+|014f6b975233|Typical|
+|...|...|
+|fd0516801814|Typical|
