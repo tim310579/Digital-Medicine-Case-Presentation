@@ -3,8 +3,8 @@
 ## environment requirement
 `$ pip install -r requirements.txt`
 
-## produce resized image data
+## resize origin image to 512 by 512 image data
 `$ python preprocess.py`
 
-## produce fuzzy & stacking image data
+## generate fuzzy & stacking image data
 `$ python fuzzy.py`
