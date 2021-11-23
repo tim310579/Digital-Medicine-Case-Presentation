@@ -23,9 +23,10 @@
 
 ## Result
 ### Train model and generate result
+
 * `$ jupyter notebook`
 
-* 然後直接執行檔案
+* 然後直接執行case2-model.ipynb
 
 * 若電腦沒有GPU，建議直接使用kaggle notebook執行程式，也可省去安裝環境的麻煩
 
