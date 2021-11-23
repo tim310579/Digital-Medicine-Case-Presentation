@@ -5,13 +5,13 @@
 ## Data preprocessing 
 
 * ### environment requirement
-* ** `$ pip install -r requirements.txt`
+* * `$ pip install -r requirements.txt`
 
 * ### resize origin image to the same size
-* `$ python preprocess.py`
+* * `$ python preprocess.py`
 
 * ### generate fuzzy & stacking image data
-* `$ python fuzzy.py`
+* * `$ python fuzzy.py`
 
 ## Result
 * ### Train model and generate result
