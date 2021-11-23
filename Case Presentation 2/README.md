@@ -32,7 +32,7 @@
 
 * notebook連結: [點我](https://www.kaggle.com/tim310579/case2-model)
 
-* 執行結果(submit.csv)
+* 執行結果(submit.csv)，也可參考 case2-model.ipynb
 
 | FileID | Type |
 |---|---|
