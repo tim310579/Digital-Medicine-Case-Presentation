@@ -25,7 +25,7 @@
 * `$ python model.py`
 
 
-* 若電腦沒有GPU，建議直接使用kaggle notebook執行程式
+* 若電腦沒有GPU，建議直接使用kaggle notebook執行程式，也可省去安裝環境的麻煩
 
 * notebook連結
 
