@@ -30,7 +30,7 @@
 
 * 若電腦沒有GPU，建議直接使用kaggle notebook執行程式，也可省去安裝環境的麻煩
 
-* notebook連結: https://www.kaggle.com/tim310579/case2-model
+* notebook連結: [https://www.kaggle.com/tim310579/case2-model]
 
 * 執行結果(submit.csv)
 
