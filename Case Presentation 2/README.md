@@ -22,14 +22,16 @@
 <img src="https://github.com/tim310579/Digital-Medicine-Case-Presentation/blob/main/Case%20Presentation%202/stacking_data/train/00af6f8c2a3d.jpg" width="20%">
 
 ## Result
- ### Train model and generate result
-* `$ python model.py`
-
+### Train model and generate result
+* `$ jupyter notebook`
+* 
+* 然後直接執行檔案
 
 * 若電腦沒有GPU，建議直接使用kaggle notebook執行程式，也可省去安裝環境的麻煩
 
-* notebook連結
+* notebook連結: https://www.kaggle.com/tim310579/case2-model
 
+* 執行結果(submit.csv)
 | FileID | Type |
 |---|---|
 |014cc6362544|Atypical|
