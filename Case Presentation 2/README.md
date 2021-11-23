@@ -1,6 +1,8 @@
 # Case Presentation2
 
-## environment requirement
+#### 原始data檔案太大，就不放上來了，只放轉換成圖片的原始大小圖片(to_image_data)
+
+## environment requirement(若使用kaggle notebook，可省略以下)
 `$ pip install -r requirements.txt`
 
 ## resize origin image to the same size
@@ -13,4 +15,5 @@
 `$ python model.py`
 
 #### 若電腦沒有GPU，建議直接使用kaggle notebook執行程式
+
 #### notebook連結
