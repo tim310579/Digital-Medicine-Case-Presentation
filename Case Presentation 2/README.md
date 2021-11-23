@@ -13,6 +13,8 @@
  ### generate fuzzy & stacking image data
 * `$ python fuzzy.py`
 
+![origin image](https://github.com/tim310579/Digital-Medicine-Case-Presentation/blob/main/Case%20Presentation%202/to_image_data/train/00af6f8c2a3d.jpg)
+
 ## Result
  ### Train model and generate result
 * `$ python model.py`
