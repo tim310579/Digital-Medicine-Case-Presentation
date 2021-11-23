@@ -28,10 +28,6 @@
 
 * 然後直接執行case2-model.ipynb
 
-* 若電腦沒有GPU，建議直接使用kaggle notebook執行程式，也可省去安裝環境的麻煩
-
-* notebook連結: [點我](https://www.kaggle.com/tim310579/case2-model)
-
 * 執行結果(submit.csv)，也可參考 [case2-model.ipynb](https://github.com/tim310579/Digital-Medicine-Case-Presentation/blob/main/Case%20Presentation%202/case2-model.ipynb)
 
 | FileID | Type |
@@ -40,3 +36,7 @@
 |014f6b975233|Typical|
 |...|...|
 |fd0516801814|Typical|
+
+* 若電腦沒有GPU，建議直接使用kaggle notebook執行程式，也可省去安裝環境的麻煩
+
+* notebook連結: [點我](https://www.kaggle.com/tim310579/case2-model)
