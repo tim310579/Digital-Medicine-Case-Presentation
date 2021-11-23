@@ -5,7 +5,7 @@
 ## Data preprocessing 
 
 * ### environment requirement
-* `$ pip install -r requirements.txt`
+* #### `$ pip install -r requirements.txt`
 
 * ### resize origin image to the same size
 * `$ python preprocess.py`
