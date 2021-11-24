@@ -5,7 +5,7 @@
 * to_image_data : 原始檔案轉成圖片
 * resized_data : 統一圖片大小為512 x 512
 * to_fuzzy : 做完fuzzy technique後的圖片
-* stacking_data : 將resize後的圖片與fuzzy圖片做疊加
+* stacking_data : 將resize後的圖片與fuzzy圖片做疊加(也是最後採用的data)
 
 ## Data preprocessing 
 
