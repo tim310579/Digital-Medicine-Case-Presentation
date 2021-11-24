@@ -4,7 +4,7 @@
 * github website的檔案列表最多只會顯示1000筆檔案，但1200筆都存在repository，實際clone時不會出問題
 * to_image_data : 原始檔案轉成圖片
 * resized_data : 統一圖片大小為512 x 512
-* to_fuzzy : 做完fuzzy tenique後的圖片
+* to_fuzzy : 做完fuzzy technique後的圖片
 * stacking_data : 將resize後的圖片與fuzzy圖片做疊加
 
 ## Data preprocessing 
